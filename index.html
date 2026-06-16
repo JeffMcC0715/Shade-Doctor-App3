@@ -263,6 +263,15 @@ tbody tr:last-child td{border-bottom:none}
   .login-btn:hover{background:var(--red-bright);box-shadow:0 4px 20px rgba(204,31,31,.45)}
 
   
+  /* ── CUSTOMER TYPEAHEAD ── */
+  .cust-dd-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);transition:background .12s}
+  .cust-dd-item:last-child{border-bottom:none}
+  .cust-dd-item:hover,.cust-dd-item.focused{background:rgba(232,196,42,.1)}
+  .cust-dd-name{font-weight:600;font-size:.87rem;color:#F5F3EE}
+  .cust-dd-meta{font-size:.74rem;color:#8A8A8A;margin-top:2px}
+  .cust-dd-loading{padding:12px 14px;font-size:.82rem;color:#8A8A8A;text-align:center}
+  .cust-dd-none{padding:12px 14px;font-size:.82rem;color:#8A8A8A;font-style:italic;text-align:center}
+
   /* ── SKETCH PAD ── */
   .sk-tool{background:var(--bg-raised);border:1.5px solid var(--border);color:var(--white);border-radius:var(--radius-sm);width:34px;height:34px;cursor:pointer;font-size:.9rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .13s;font-family:'DM Sans',sans-serif}
   .sk-tool:hover{border-color:var(--accent);color:var(--accent)}
@@ -319,7 +328,9 @@ tbody tr:last-child td{border-bottom:none}
     <div class="card-hd"><div class="step-badge">1</div><h2>Customer Information</h2></div>
     <div class="card-bd">
       <div class="cust-row">
-        <div class="cust-field"><label class="cust-label" for="custName">Full Name <span class="req">*</span></label><input class="cust-input" id="custName" type="text" placeholder="Jane Smith" autocomplete="name" /></div>
+        <div class="cust-field" style="position:relative"><label class="cust-label" for="custName">Full Name <span class="req">*</span></label><input class="cust-input" id="custName" type="text" placeholder="Jane Smith" autocomplete="off"
+          oninput="skCustSearch(this.value)" onblur="skCustBlurDelay()" onkeydown="skCustKeyNav(event)" />
+        <div id="custDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:999;background:#1e1e1e;border:1.5px solid var(--accent);border-top:none;border-radius:0 0 6px 6px;max-height:220px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.6)"></div></div>
         <div class="cust-field"><label class="cust-label" for="custEmail">Email Address <span class="req">*</span></label><input class="cust-input" id="custEmail" type="email" placeholder="jane@example.com" autocomplete="email" /></div>
         <div class="cust-field"><label class="cust-label" for="custPhone">Phone Number</label><input class="cust-input" id="custPhone" type="tel" placeholder="(555) 000-0000" autocomplete="tel" /></div>
       </div>
@@ -403,7 +414,47 @@ tbody tr:last-child td{border-bottom:none}
     <div class="card" id="s2" style="display:none"><div class="card-hd"><div class="step-badge">3</div><h2>Select Sub-Category</h2></div><div class="card-bd" id="s2bd"></div></div>
     <div class="card" id="sW" style="display:none"><div class="card-hd"><div class="step-badge" id="sWbadge">3</div><h2>Select Width</h2></div><div class="card-bd" id="sWbd"></div></div>
     <div class="card" id="sH" style="display:none"><div class="card-hd"><div class="step-badge" id="sHbadge">4</div><h2>Select Height</h2></div><div class="card-bd" id="sHbd"></div></div>
-    <div class="card" id="s3" style="display:none"><div class="card-hd"><div class="step-badge" id="s3badge">5</div><h2 id="s3title">Assembly Items &amp; Pricing</h2></div><div class="card-bd" id="s3bd"></div></div>
+    <div class="card" id="sFabric" style="display:none">
+      <div class="card-hd">
+        <div class="step-badge" id="sFabricBadge">5</div>
+        <h2>Select Fabric Color</h2>
+      </div>
+      <div class="card-bd">
+        <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
+          <div class="cust-field" style="flex:1;min-width:220px">
+            <label class="cust-label" for="fabricColor">Fabric Color</label>
+            <select class="cust-input" id="fabricColor" style="cursor:pointer" onchange="onFabricChange(this.value)">
+              <option value="">— Select Fabric Color —</option>
+            <option value="Custom – See Additional Details">Custom – See Additional Details</option>
+            <option value="Phifer Black 95">Phifer Black 95</option>
+            <option value="Phifer Dark Bronze 95">Phifer Dark Bronze 95</option>
+            <option value="Phifer Carbon 95">Phifer Carbon 95</option>
+            <option value="Phifer Mocha 95">Phifer Mocha 95</option>
+            <option value="Phifer Black 97">Phifer Black 97</option>
+            <option value="Phifer Dark Bronze 97">Phifer Dark Bronze 97</option>
+            <option value="Twitchell Flat Black 95">Twitchell Flat Black 95</option>
+            <option value="Twitchell Tobacco 95">Twitchell Tobacco 95</option>
+            <option value="Twitchell Granite 95">Twitchell Granite 95</option>
+            <option value="Twitchell Espresso 95">Twitchell Espresso 95</option>
+            <option value="Twitchell Charcoal 95">Twitchell Charcoal 95</option>
+            <option value="Twitchell Flat Black 97">Twitchell Flat Black 97</option>
+            <option value="Twitchell Tobacco 97">Twitchell Tobacco 97</option>
+            <option value="Twitchell Granite 97">Twitchell Granite 97</option>
+            <option value="Twitchell Espresso 97">Twitchell Espresso 97</option>
+            <option value="Twitchell Charcoal 97">Twitchell Charcoal 97</option>
+            </select>
+          </div>
+          <div class="cust-field" id="fabricCustomWrap" style="flex:1;min-width:220px;display:none">
+            <label class="cust-label" for="fabricCustomDetail">Custom Details</label>
+            <input class="cust-input" id="fabricCustomDetail" type="text" placeholder="Describe the custom fabric…" />
+          </div>
+        </div>
+        <div style="margin-top:16px;display:flex;justify-content:flex-end">
+          <button class="cust-submit" onclick="submitFabricStep()">Continue to Items →</button>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="s3" style="display:none"><div class="card-hd"><div class="step-badge" id="s3badge">6</div><h2 id="s3title">Assembly Items &amp; Pricing</h2></div><div class="card-bd" id="s3bd"></div></div>
 
     <!-- Sketch Pad -->
     <div class="card" id="sSketch" style="display:none">
@@ -442,14 +493,18 @@ tbody tr:last-child td{border-bottom:none}
         </div>
         <div style="position:relative;border:2px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;background:#1a1a1a" id="sketchWrap">
           <canvas id="sketchCanvas" style="display:block;width:100%;touch-action:none;cursor:crosshair"></canvas>
-          <div id="textInputWrap" style="display:none;position:absolute">
-            <input id="textInput" type="text" placeholder="Type label then press Enter"
-              style="background:rgba(26,26,26,.9);border:1.5px dashed var(--accent);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;padding:4px 8px;outline:none;min-width:160px;border-radius:4px"
-              onkeydown="skTextCommit(event)" />
+          <div id="textInputWrap" style="display:none;position:absolute;z-index:10">
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <input id="textInput" type="text" placeholder="Type callout then press Enter"
+                style="background:rgba(20,20,20,.95);border:1.5px solid var(--accent);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;padding:5px 9px;outline:none;min-width:190px;border-radius:4px;box-shadow:0 2px 12px rgba(0,0,0,.6)"
+                onkeydown="skTextCommit(event)" />
+              <span style="font-size:10px;color:var(--accent);opacity:.7;padding-left:2px">Enter to place • Esc to cancel</span>
+            </div>
           </div>
+          <span id="skTextHint" style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(232,196,42,.15);border:1px solid rgba(232,196,42,.3);color:var(--accent);font-size:11px;padding:3px 12px;border-radius:99px;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap">✓ Label placed — click anywhere to add another</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:8px">
-          <span style="font-size:.72rem;color:var(--muted)">Tip: use the T tool to add measurements and callouts</span>
+          <span style="font-size:.72rem;color:var(--muted)">T tool: click to place a callout, type, press Enter. Click again to add another.</span>
           <button class="sk-action-btn" onclick="skSave()" style="border-color:var(--accent);color:var(--accent)">💾 Save Sketch to Order</button>
         </div>
       </div>
@@ -607,6 +662,175 @@ function bc() {
   if (sel.sub) h += '<span class="sep">›</span><span class="crumb">' + sel.sub + '</span>';
   h += '<button class="reset-btn" onclick="resetAll()">↺ Reset</button>';
   el.innerHTML = h;
+}
+
+// ── Customer typeahead ──────────────────────────────
+let _custSearchTimer = null;
+let _custDropFocusIdx = -1;
+let _custSearchResults = [];
+
+async function skCustSearch(val) {
+  const dd = document.getElementById('custDropdown');
+  clearTimeout(_custSearchTimer);
+  _custDropFocusIdx = -1;
+
+  if (!val || val.trim().length < 2) {
+    dd.style.display = 'none';
+    return;
+  }
+
+  // Debounce 350ms
+  _custSearchTimer = setTimeout(async () => {
+    dd.innerHTML = '<div class="cust-dd-loading">Searching JobTread…</div>';
+    dd.style.display = 'block';
+
+    try {
+      await resolveOrgId();
+      const data = await paveCall({
+        organization: {
+          $: { id: ORG_ID_JT },
+          accounts: {
+            $: {
+              size: 10,
+              where: { and: [['type', 'customer'], ['name', 'like', '%' + val.trim() + '%']] }
+            },
+            nodes: {
+              id: {},
+              name: {},
+              primaryContact: {
+                customFieldValues: { _on_emailAddressCustomFieldValue: { value: {} } },
+                name: {}
+              },
+              customFieldValues: { _on_textCustomFieldValue: { name: {}, value: {} }, _on_optionCustomFieldValue: { name: {}, value: {} } },
+              locations: {
+                $: { size: 3 },
+                nodes: { id: {}, name: {}, address: {} }
+              }
+            }
+          }
+        }
+      });
+
+      const accounts = data.organization.accounts.nodes || [];
+      _custSearchResults = accounts;
+
+      if (!accounts.length) {
+        dd.innerHTML = '<div class="cust-dd-none">No customers found in JobTread</div>';
+        return;
+      }
+
+      dd.innerHTML = accounts.map((acc, i) => {
+        const loc = acc.locations?.nodes?.[0];
+        const addr = loc?.address || loc?.name || '';
+        const shortAddr = addr ? addr.split(',').slice(0,2).join(',') : '';
+        return `<div class="cust-dd-item" data-idx="${i}" onmousedown="skCustSelect(${i})">
+          <div class="cust-dd-name">${acc.name}</div>
+          ${shortAddr ? `<div class="cust-dd-meta">${shortAddr}</div>` : ''}
+        </div>`;
+      }).join('');
+
+    } catch(err) {
+      dd.innerHTML = `<div class="cust-dd-none">Search unavailable</div>`;
+      console.warn('Customer search failed:', err.message);
+    }
+  }, 350);
+}
+
+function skCustSelect(idx) {
+  const acc = _custSearchResults[idx];
+  if (!acc) return;
+
+  // Populate name
+  document.getElementById('custName').value = acc.name;
+
+  // Populate email from customFieldValues or primaryContact
+  let email = '', phone = '', branch = '';
+  if (acc.customFieldValues) {
+    acc.customFieldValues.forEach(cf => {
+      const n = (cf.name || '').toLowerCase();
+      if (n.includes('email')) email = cf.value || '';
+      if (n.includes('phone')) phone = cf.value || '';
+      if (n === 'branch') branch = cf.value || '';
+    });
+  }
+  // Fallback: check primaryContact for email
+  if (!email && acc.primaryContact?.customFieldValues) {
+    acc.primaryContact.customFieldValues.forEach(cf => {
+      if ((cf.name || '').toLowerCase().includes('email')) email = cf.value || '';
+      if ((cf.name || '').toLowerCase().includes('phone')) phone = cf.value || '';
+    });
+  }
+
+  if (email) document.getElementById('custEmail').value = email;
+  if (phone) document.getElementById('custPhone').value = phone;
+
+  // Populate branch dropdown
+  if (branch) {
+    const sel = document.getElementById('custBranch');
+    if (sel) {
+      for (const opt of sel.options) {
+        if (opt.value.toLowerCase() === branch.toLowerCase()) {
+          sel.value = opt.value;
+          break;
+        }
+      }
+    }
+  }
+
+  // Populate address from first location
+  const loc = acc.locations?.nodes?.[0];
+  if (loc?.address) {
+    const parts = loc.address.split(',').map(s => s.trim());
+    // parts: [street, city, state zip, country] roughly
+    if (parts[0]) document.getElementById('custStreet').value = parts[0];
+    if (parts[1]) document.getElementById('custCity').value = parts[1];
+    if (parts[2]) {
+      // "TX 75001" → split into state + zip
+      const stateZip = parts[2].trim().split(' ');
+      if (stateZip[0]) document.getElementById('custState').value = stateZip[0];
+      if (stateZip[1]) document.getElementById('custZip').value = stateZip[1];
+    }
+  }
+
+  // Store the JT account ID so we skip re-creation
+  customer.jtAccountId = acc.id;
+  if (loc?.id) customer.jtLocationId = loc.id;
+
+  document.getElementById('custDropdown').style.display = 'none';
+  _custSearchResults = [];
+}
+
+function skCustBlurDelay() {
+  // Delay hide so mousedown on item fires first
+  setTimeout(() => {
+    const dd = document.getElementById('custDropdown');
+    if (dd) dd.style.display = 'none';
+  }, 200);
+}
+
+function skCustKeyNav(e) {
+  const dd = document.getElementById('custDropdown');
+  if (dd.style.display === 'none') return;
+  const items = dd.querySelectorAll('.cust-dd-item');
+  if (!items.length) return;
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    _custDropFocusIdx = Math.min(_custDropFocusIdx + 1, items.length - 1);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    _custDropFocusIdx = Math.max(_custDropFocusIdx - 1, 0);
+  } else if (e.key === 'Enter' && _custDropFocusIdx >= 0) {
+    e.preventDefault();
+    skCustSelect(_custDropFocusIdx);
+    return;
+  } else if (e.key === 'Escape') {
+    dd.style.display = 'none';
+    return;
+  }
+
+  items.forEach((item, i) => item.classList.toggle('focused', i === _custDropFocusIdx));
+  if (_custDropFocusIdx >= 0) items[_custDropFocusIdx].scrollIntoView({ block: 'nearest' });
 }
 
 async function submitCustomer() {
@@ -903,7 +1127,7 @@ function editCustomer() {
   document.getElementById('s0').style.display = '';
   document.getElementById('sJob').style.display = 'none';
   document.getElementById('catalogSteps').style.display = 'none';
-  ['s2','sW','sH','s3'].forEach(id => document.getElementById(id).style.display = 'none');
+  ['s2','sW','sH','sFabric','s3'].forEach(id => document.getElementById(id).style.display = 'none');
   document.getElementById('custName').value  = customer.name;
   document.getElementById('custEmail').value = customer.email;
   document.getElementById('custPhone').value = customer.phone;
@@ -973,7 +1197,7 @@ function showItems() {
   const items = C[sel.cat][sel.sub];
   const hasDims = items.some(i => i.width || i.height);
   ['sW','sH','s3'].forEach(id => document.getElementById(id).style.display = 'none');
-  if (!hasDims) { renderItemTable(items, false); scroll('s3'); showSketchPad(); return; }
+  if (!hasDims) { renderItemTable(items, false); showFabricStep(); showSketchPad(); return; }
   renderWidthStep(items); scroll('sW');
 }
 
@@ -1015,7 +1239,7 @@ function renderHeightStep(items) {
 function pickHeight(h, items) {
   dimSel.height = h; renderHeightStep(items);
   const matched = items.filter(i => i.width === dimSel.width && i.height === dimSel.height);
-  renderItemTable(matched, true); scroll('s3'); showSketchPad();
+  renderItemTable(matched, true); showFabricStep(); showSketchPad();
 }
 
 // ── Item table ───────────────────────────────────
@@ -1189,6 +1413,7 @@ function openSubmit() {
     customer.email  ? `<div class="submit-cust-field"><span class="submit-cust-lbl">Email</span><span class="submit-cust-val">${customer.email}</span></div>` : '',
     customer.phone  ? `<div class="submit-cust-field"><span class="submit-cust-lbl">Phone</span><span class="submit-cust-val">${customer.phone}</span></div>` : '',
     addrDisplay     ? `<div class="submit-cust-field"><span class="submit-cust-lbl">Address</span><span class="submit-cust-val">${addrDisplay}</span></div>` : '',
+    customer.fabricColor ? `<div class="submit-cust-field"><span class="submit-cust-lbl">Fabric Color</span><span class="submit-cust-val">${customer.fabricColor}${customer.fabricCustomDetail ? ' — ' + customer.fabricCustomDetail : ''}</span></div>` : '',
     `<div class="submit-cust-field"><span class="submit-cust-lbl">Date</span><span class="submit-cust-val">${today}</span></div>`,
   ].join('');
 
@@ -1414,14 +1639,14 @@ async function pushToJobTread(notes, subtotal, savings, final, count) {
 
 
 function startOver() {
-  selections.clear(); customer = {name:'',email:'',phone:'',street:'',city:'',state:'',zip:'',branch:'',jobName:'',jobNotes:'',jtAccountId:null,jtContactId:null,jtLocationId:null,jtJobId:null,jtJobUrl:null}; sel = {cat:null,sub:null}; dimSel = {width:null,height:null}; globalDisc = 0;
+  selections.clear(); customer = {name:'',email:'',phone:'',street:'',city:'',state:'',zip:'',branch:'',jobName:'',jobNotes:'',fabricColor:'',fabricCustomDetail:'',jtAccountId:null,jtContactId:null,jtLocationId:null,jtJobId:null,jtJobUrl:null}; sel = {cat:null,sub:null}; dimSel = {width:null,height:null}; globalDisc = 0;
   document.getElementById('submitSuccess').style.display = 'none';
   document.body.style.overflow = '';
   updatePanel();
   document.getElementById('s0').style.display = '';
   document.getElementById('sJob').style.display = 'none';
   document.getElementById('catalogSteps').style.display = 'none';
-  ['s2','sW','sH','s3'].forEach(id => document.getElementById(id).style.display = 'none');
+  ['s2','sW','sH','sFabric','s3'].forEach(id => document.getElementById(id).style.display = 'none');
   document.getElementById('custName').value = ''; document.getElementById('custEmail').value = ''; document.getElementById('custPhone').value = ''; document.getElementById('custStreet').value = ''; document.getElementById('custCity').value = ''; document.getElementById('custState').value = ''; document.getElementById('custZip').value = ''; document.getElementById('custBranch').value = ''; document.getElementById('jobNameInput').value = ''; document.getElementById('jobNotesInput').value = ''; document.getElementById('sJob').style.display = 'none';
   renderCats(); bc(); window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -1462,7 +1687,7 @@ function copyList() {
 function resetAll() {
   sel = {cat:null,sub:null}; dimSel = {width:null,height:null};
   renderCats(); bc();
-  ['s2','sW','sH','s3'].forEach(id => document.getElementById(id).style.display = 'none');
+  ['s2','sW','sH','sFabric','s3'].forEach(id => document.getElementById(id).style.display = 'none');
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -1608,34 +1833,63 @@ function skUp() {
 }
 
 function skTextPlace(pos) {
+  // Close any existing input first (commit it)
+  skTextClose();
+
   sk.textX = pos.x; sk.textY = pos.y;
   const wrap = document.getElementById('textInputWrap');
   const inp  = document.getElementById('textInput');
   const rect = skCanvas().getBoundingClientRect();
   const scaleX = rect.width  / skCanvas().width;
   const scaleY = rect.height / skCanvas().height;
+
+  // Position the input at the click spot
   wrap.style.display = 'block';
-  wrap.style.left = (pos.x * scaleX - 4) + 'px';
-  wrap.style.top  = (pos.y * scaleY - 16) + 'px';
+  wrap.style.left = Math.min(pos.x * scaleX - 4, rect.width - 180) + 'px';
+  wrap.style.top  = Math.max((pos.y * scaleY - 28), 0) + 'px';
   inp.value = '';
+  inp.style.borderColor = sk.color;
   inp.focus();
 }
 
-function skTextCommit(e) {
-  if (e.key !== 'Enter') return;
-  const val = document.getElementById('textInput').value.trim();
+function skTextClose() {
+  const wrap = document.getElementById('textInputWrap');
+  const inp  = document.getElementById('textInput');
+  if (wrap.style.display === 'none') return;
+  const val = inp.value.trim();
   if (val) {
     skSaveHistory();
     const ctx = skCtx();
-    ctx.font = `${Math.max(12, sk.size * 4)}px "DM Sans", sans-serif`;
+    const fontSize = Math.max(13, sk.size * 4);
+    ctx.font = `600 ${fontSize}px "DM Sans", sans-serif`;
     ctx.fillStyle = sk.color;
     ctx.globalCompositeOperation = 'source-over';
-    ctx.fillText(val, sk.textX, sk.textY);
+    // Draw a small callout dot
+    ctx.beginPath();
+    ctx.arc(sk.textX, sk.textY, 4, 0, Math.PI * 2);
+    ctx.fill();
+    // Draw the text slightly offset from dot
+    ctx.fillText(val, sk.textX + 8, sk.textY + 4);
   }
-  document.getElementById('textInputWrap').style.display = 'none';
+  wrap.style.display = 'none';
+  inp.value = '';
+}
+
+function skTextCommit(e) {
+  if (e.key === 'Enter') {
+    skTextClose();
+    // Stay in text mode — show hint that they can click again
+    const hint = document.getElementById('skTextHint');
+    if (hint) { hint.style.opacity = '1'; setTimeout(() => hint.style.opacity = '0', 1500); }
+  }
+  if (e.key === 'Escape') {
+    document.getElementById('textInput').value = '';
+    document.getElementById('textInputWrap').style.display = 'none';
+  }
 }
 
 function skTool(t) {
+  if (sk.tool === 'text' && t !== 'text') skTextClose();
   sk.tool = t;
   document.querySelectorAll('.sk-tool').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('tool-' + t);
@@ -1696,6 +1950,37 @@ function showSketchPad() {
     resetOrgId();
   }
 })();
+
+// ── Fabric Color step ─────────────────────────────
+function onFabricChange(val) {
+  const wrap = document.getElementById('fabricCustomWrap');
+  wrap.style.display = val === 'Custom – See Additional Details' ? '' : 'none';
+  if (val !== 'Custom – See Additional Details') {
+    document.getElementById('fabricCustomDetail').value = '';
+  }
+}
+
+function showFabricStep() {
+  // Reset fabric selection
+  document.getElementById('fabricColor').value = '';
+  document.getElementById('fabricCustomDetail').value = '';
+  document.getElementById('fabricCustomWrap').style.display = 'none';
+  document.getElementById('sFabric').style.display = '';
+  scroll('sFabric');
+}
+
+function submitFabricStep() {
+  const color = document.getElementById('fabricColor').value;
+  const custom = document.getElementById('fabricCustomDetail').value.trim();
+
+  // Store on customer object
+  customer.fabricColor = color;
+  customer.fabricCustomDetail = custom;
+
+  document.getElementById('s3').style.display = '';
+  scroll('s3');
+}
+
 
 renderCats();
 </script>
